@@ -1,0 +1,10 @@
+name: TestPlugin
+version: 1.0
+main: Main.Main
+api-version: 1.17
+authors: [ getQueryString, Jovaniwu ]
+description: Timer Plugin
+
+commands:
+  timer:
+    permission: timer.command
