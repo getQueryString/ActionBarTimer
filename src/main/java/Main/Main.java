@@ -28,11 +28,11 @@ public class Main extends JavaPlugin implements CommandExecutor {
     public File file = new File("plugins/TimerSaved/config.yml");
     public YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-    public Main(){
+    public Main() {
         instance = this;
     }
 
-    public static Main getInstance(){
+    public static Main getInstance() {
         return instance;
     }
 
@@ -47,6 +47,49 @@ public class Main extends JavaPlugin implements CommandExecutor {
     public void onDisable() {
     }
 
+    public String getTime() {
+        long seconds = cfg.getInt("Time");
+        long minutes = 0L;
+        long hours = 0L;
+        long days = 0L;
+        long weeks = 0L;
+
+        while (seconds > 60L) {
+            seconds -= 60L;
+            minutes++;
+        }
+        while (minutes > 60L) {
+            minutes -= 60L;
+            hours++;
+        }
+        while (hours > 24L) {
+            hours -= 24L;
+            days++;
+        }
+        while (days > 7L) {
+            days -= 7L;
+            weeks++;
+        }
+        while (weeks > 7L) {
+            days -= 7L;
+        }
+        if (weeks != 0L) {
+            return "§a" + weeks + " §cWoche(n) §a" + days + " §cTag(e) §a" + hours + " §cStunde(n) §a" + minutes + " §cMinute(n) §a" + seconds + " §cSekunde(n)";
+        }
+        if (days != 0L) {
+            return "§a" + days + " §cTag(e) §a" + hours + " §cStunde(n) §a" + minutes + " §cMinute(n) §a" + seconds + " §cSekunde(n)";
+        }
+        if (hours != 0L) {
+            return "§a" + hours + " §cStunde(n) §a" + minutes + " §cMinute(n) §a" + seconds + " §cSekunde(n)";
+        }
+        if (minutes != 0L) {
+            return "§a" + minutes + " §cMinute(n) §a" + seconds + " §cSekunde(n)";
+        }
+        if (seconds != 0L) {
+            return "§a" + seconds + " §cSekunde(n)";
+        }
+        return "§a" + weeks + " §cWoche(n) §a" + days + " §cTag(e) §a" + hours + " §cStunde(n) §a" + minutes + " §cMinute(n) §a" + seconds + " §cSekunde(n)";
+    }
 
     public void TimerRunnable() {
         new BukkitRunnable() {
@@ -61,7 +104,8 @@ public class Main extends JavaPlugin implements CommandExecutor {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l" + cfg.getString("Time") + "s"));
+                        //p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l" + cfg.getString("Time")+ "s"));
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l" + getTime()));
                     } else {
                         Stopped();
                     }
@@ -123,7 +167,7 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
     public void Stopped() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4Timer ist pausiert! §e(" + cfg.getString("Time") + "s)"));
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4" + cfg.getString("Time") + "s"));
         }
     }
 }
