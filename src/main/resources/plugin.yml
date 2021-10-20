@@ -1,4 +1,4 @@
-name: TestPlugin
+name: ActionBarTimer
 version: 1.0
 main: Main.Main
 api-version: 1.17
