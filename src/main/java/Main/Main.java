@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
-public class Main extends JavaPlugin implements CommandExecutor {
+public final class Main extends JavaPlugin implements CommandExecutor {
 
     private static Main instance;
 
@@ -25,13 +25,18 @@ public class Main extends JavaPlugin implements CommandExecutor {
     }
 
     @Override
+    public void onLoad() {
+        instance = this;
+    }
+
+    @Override
     public void onEnable() {
         Objects.requireNonNull(getCommand("timer")).setExecutor(new TimerCommand());
 
         timerapi = new TimerAPI();
-        if (timerapi.isRunning()) {
+        /*if (timerapi.isRunning()) {
             timerapi.setRunning(false);
-        }
+        }*/
         timerapi.TimerRunnable();
 
         Bukkit.getConsoleSender().sendMessage("§5Plugin fertig geladen");

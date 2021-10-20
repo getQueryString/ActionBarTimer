@@ -17,18 +17,16 @@ public class TimerAPI {
 
     private static TimerAPI instance;
 
-    private final File file;
-    private final YamlConfiguration cfg;
+    private File file = new File("plugins/TimerSaved/config.yml");
+    private YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-    private volatile boolean running;
-    private int time;
+    //private volatile boolean running;
+    private boolean running = false;
+    private int time = getConfig().getInt("Time");
 
     // Main
     public TimerAPI() {
-        this.running = false;
-        this.time = 0;
-        this.file = new File("plugins/TimerSaved/config.yml");
-        this.cfg = YamlConfiguration.loadConfiguration(file);
+        instance = this;
     }
 
     public TimerAPI getInstance() {
@@ -46,21 +44,22 @@ public class TimerAPI {
 
     // time management
     public boolean isRunning() {
-        Bukkit.getConsoleSender().sendMessage("§cisRunning " + running);
         return running;
     }
 
     public void setRunning(boolean running) {
         this.running = running;
-        Bukkit.getConsoleSender().sendMessage("§csetRunning " + isRunning());
     }
 
     public int getTime() {
+        Bukkit.getConsoleSender().sendMessage("§5getTime1");
         return time;
     }
 
     public void setTime(int time) {
+        Bukkit.getConsoleSender().sendMessage("§5setTime1");
         this.time = time;
+        Bukkit.getConsoleSender().sendMessage("§5setTime2");
     }
 
     // ActionBar
@@ -71,7 +70,7 @@ public class TimerAPI {
     }
 
     // Timer
-    public void TimerRunnable() {
+    /*public void TimerRunnable() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -90,6 +89,19 @@ public class TimerAPI {
                         Stopped();
                     }
                 }
+            }
+        }.runTaskTimer(Main.getInstance(), 20, 20);
+    }*/
+
+    public void TimerRunnable() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                for (Player all : Bukkit.getOnlinePlayers()) {
+                    all.sendMessage("§cRunnable §f" + isRunning());
+                }
+
             }
         }.runTaskTimer(Main.getInstance(), 20, 20);
     }
