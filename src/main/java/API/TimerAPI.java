@@ -20,7 +20,7 @@ public class TimerAPI {
     private final File file;
     private final YamlConfiguration cfg;
 
-    private boolean running;
+    private volatile boolean running;
     private int time;
 
     // Main

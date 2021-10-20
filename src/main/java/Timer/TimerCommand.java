@@ -33,7 +33,6 @@ public class TimerCommand implements CommandExecutor {
                 }
                 break;
 
-
             case "pause":
                 if (!timerapi.isRunning()) {
                     sender.sendMessage("§4Der Timer läuft nicht");
@@ -45,16 +44,13 @@ public class TimerCommand implements CommandExecutor {
                 break;
 
             case "reset":
-                if (timerapi.getTime() > 0) {
+                if (timerapi.getTime() >= 0) {
                     timerapi.Stopped();
                     timerapi.setRunning(false);
                     timerapi.setTime(0);
-                    Bukkit.getConsoleSender().sendMessage("§c0");
                     try {
-                        Bukkit.getConsoleSender().sendMessage("§c1");
                         timerapi.getConfig().set("Time", timerapi.getTime());
                         timerapi.getConfig().save(timerapi.getFile());
-                        Bukkit.getConsoleSender().sendMessage("§c2");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
