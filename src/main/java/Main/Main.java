@@ -3,9 +3,12 @@
 package Main;
 
 import API.TimerAPI;
-import Timer.TimerCommand;
+import Commands.TimerCommand;
+import Listener.onKick;
+import Listener.onQuit;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -31,12 +34,18 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
+        // Commands
         Objects.requireNonNull(getCommand("timer")).setExecutor(new TimerCommand());
 
+        // Events
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new onQuit(), this);
+        pm.registerEvents(new onKick(), this);
+
         timerapi = new TimerAPI();
-        /*if (timerapi.isRunning()) {
+        if (timerapi.isRunning()) {
             timerapi.setRunning(false);
-        }*/
+        }
         timerapi.TimerRunnable();
 
         Bukkit.getConsoleSender().sendMessage("§5Plugin fertig geladen");
@@ -46,7 +55,7 @@ public final class Main extends JavaPlugin implements CommandExecutor {
     public void onDisable() {
     }
 
-    /*public TimerAPI getTimer() {
+    public TimerAPI getTimer() {
         return timerapi;
-    }*/
+    }
 }

@@ -1,6 +1,6 @@
 // Copyright© by Fin
 
-package Timer;
+package Commands;
 
 import API.TimerAPI;
 import Main.Main;
@@ -12,8 +12,6 @@ import java.io.IOException;
 
 public class TimerCommand implements CommandExecutor {
 
-    TimerAPI timerapi = new TimerAPI().getInstance();
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -22,23 +20,25 @@ public class TimerCommand implements CommandExecutor {
             return true;
         }
 
+        TimerAPI timerapi = Main.getInstance().getTimer();
+
         switch (args[0].toLowerCase()) {
 
             case "resume":
                 if (timerapi.isRunning()) {
-                    sender.sendMessage("§4Der Timer läuft bereits §f" + timerapi.isRunning());
+                    sender.sendMessage("§4Der Timer läuft bereits");
                 } else {
                     timerapi.setRunning(true);
-                    sender.sendMessage("§aDer Timer wurde gestartet §f" + timerapi.isRunning());
+                    sender.sendMessage("§aDer Timer wurde gestartet");
                 }
                 break;
 
             case "pause":
                 if (!timerapi.isRunning()) {
-                    sender.sendMessage("§4Der Timer läuft nicht §f" + timerapi.isRunning());
+                    sender.sendMessage("§4Der Timer läuft nicht");
                 } else {
                     timerapi.setRunning(false);
-                    sender.sendMessage("§4Der Timer wurde pausiert §f" + timerapi.isRunning());
+                    sender.sendMessage("§4Der Timer wurde pausiert");
                 }
                 break;
 
@@ -52,7 +52,7 @@ public class TimerCommand implements CommandExecutor {
                 break;*/
 
             case "reset":
-                if (timerapi.getTime() >= 0) {
+                if (timerapi.getTime() > 0) {
                     timerapi.setRunning(false);
                     timerapi.setTime(0);
                     try {
@@ -61,9 +61,9 @@ public class TimerCommand implements CommandExecutor {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    sender.sendMessage("§4Der Timer wurde zurückgesetzt §f" + timerapi.isRunning());
+                    sender.sendMessage("§4Der Timer wurde zurückgesetzt");
                 } else {
-                    sender.sendMessage("§4Timer ist bereits auf 0 §f" + timerapi.isRunning());
+                    sender.sendMessage("§4Timer ist bereits auf 0");
                 }
                 break;
         }

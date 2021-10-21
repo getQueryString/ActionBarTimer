@@ -20,7 +20,6 @@ public class TimerAPI {
     private File file = new File("plugins/TimerSaved/config.yml");
     private YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-    //private volatile boolean running;
     private boolean running = false;
     private int time = getConfig().getInt("Time");
 
@@ -52,25 +51,22 @@ public class TimerAPI {
     }
 
     public int getTime() {
-        Bukkit.getConsoleSender().sendMessage("§5getTime1");
         return time;
     }
 
     public void setTime(int time) {
-        Bukkit.getConsoleSender().sendMessage("§5setTime1");
         this.time = time;
-        Bukkit.getConsoleSender().sendMessage("§5setTime2");
     }
 
     // ActionBar
     public void Stopped() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4§l" + getConfig().getString("Time")));
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getTimeFormat()));
         }
     }
 
     // Timer
-    /*public void TimerRunnable() {
+    public void TimerRunnable() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -85,23 +81,9 @@ public class TimerAPI {
                         }
                         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getTimeFormat()));
                     } else {
-                        Bukkit.getConsoleSender().sendMessage("§cLäuft nicht...");
                         Stopped();
                     }
                 }
-            }
-        }.runTaskTimer(Main.getInstance(), 20, 20);
-    }*/
-
-    public void TimerRunnable() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-
-                for (Player all : Bukkit.getOnlinePlayers()) {
-                    all.sendMessage("§cRunnable §f" + isRunning());
-                }
-
             }
         }.runTaskTimer(Main.getInstance(), 20, 20);
     }
@@ -133,21 +115,40 @@ public class TimerAPI {
         while (weeks > 7L) {
             days -= 7L;
         }
-        if (weeks != 0L) {
-            return "§c" + weeks + "§cw §c" + days + "§cd §c" + hours + "§ch §c" + minutes + "§cm §c" + seconds + "§cs";
+        if (isRunning()) {
+            if (weeks != 0L) {
+                return "§c" + weeks + "§cw " + days + "§cd " + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
+            }
+            if (days != 0L) {
+                return "§c" + days + "§cd " + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
+            }
+            if (hours != 0L) {
+                return "§c" + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
+            }
+            if (minutes != 0L) {
+                return "§c" + minutes + "§cm " + seconds + "§cs";
+            }
+            if (seconds != 0L) {
+                return "§c" + seconds + "§cs";
+            }
+
+        } else {
+            if (weeks != 0L) {
+                return "§4§l" + weeks + "§4§lw " + days + "§4§ld " + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
+            }
+            if (days != 0L) {
+                return "§4§l" + days + "§4§ld " + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
+            }
+            if (hours != 0L) {
+                return "§4§l" + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
+            }
+            if (minutes != 0L) {
+                return "§4§l" + minutes + "§4§lm " + seconds + "§4§ls";
+            }
+            if (seconds != 0L) {
+                return "§4§l" + seconds + "§4§ls";
+            }
         }
-        if (days != 0L) {
-            return "§c" + days + "§cd §c" + hours + "§ch §c" + minutes + "§cm §c" + seconds + "§cs";
-        }
-        if (hours != 0L) {
-            return "§c" + hours + "§ch §c" + minutes + "§cm §c" + seconds + "§cs";
-        }
-        if (minutes != 0L) {
-            return "§c" + minutes + "§cm §c" + seconds + "§cs";
-        }
-        if (seconds != 0L) {
-            return "§c" + seconds + "§cs";
-        }
-        return "§c" + hours + "§ch §c" + minutes + "§cm §c" + seconds + "§cs";
+        return "§4§l" + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
     }
 }
