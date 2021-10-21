@@ -53,7 +53,7 @@ public class TimerCommand implements CommandExecutor {
 
             case "set": {
                 if (args.length != 2) {
-                    sender.sendMessage(TimerAPI.usage);
+                    sender.sendMessage("Verwendung: /timer <Zeit in s>");
                     return true;
                 }
 
@@ -61,7 +61,7 @@ public class TimerCommand implements CommandExecutor {
                     timerapi.setRunning(false);
                     timerapi.setTime(Integer.parseInt(args[1]));
                     timerapi.SaveTime();
-                    sender.sendMessage("§4Die Zeit wurde auf §4§l" + args[1] + " §4gesetzt");
+                    sender.sendMessage("§4Die Zeit wurde auf " + timerapi.getTimeFormat() + " §4gesetzt");
                 } catch (NumberFormatException e) {
                     sender.sendMessage("§4Zeit muss eine Zahl sein");
                 }

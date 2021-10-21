@@ -23,7 +23,7 @@ public class TimerAPI {
     private boolean running = false;
     private int time = getConfig().getInt("Time");
 
-    public static String usage = "Verwendung: /timer <resume, pause, reset>, set <Zeit>";
+    public static String usage = "Verwendung: /timer <resume, pause, reset, set <Zeit in s>>";
     private String color = null;
 
     // Main
@@ -102,40 +102,44 @@ public class TimerAPI {
         long hours = 0L;
         long days = 0L;
         long weeks = 0L;
+        long years = 0;
 
         if (isRunning()) color = "§c";
         else color = "§4§l";
 
-        while (seconds > 60L) {
+        while (seconds >= 60L) {
             seconds -= 60L;
             minutes++;
         }
-        while (minutes > 60L) {
+        while (minutes >= 60L) {
             minutes -= 60L;
             hours++;
         }
-        while (hours > 24L) {
+        while (hours >= 24L) {
             hours -= 24L;
             days++;
         }
-        while (days > 7L) {
+        while (days >= 7L) {
             days -= 7L;
             weeks++;
         }
+        if (years != 0L) {
+            return color + years + "y " + weeks + "w " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+        }
         if (weeks != 0L) {
-            return color + weeks + color + "w " + days + color + "d " + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
+            return color + weeks + "w " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
         }
         if (days != 0L) {
-            return color + days + color + "d " + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
+            return color + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
         }
         if (hours != 0L) {
-            return color + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
+            return color + hours + "h " + minutes + "m " + seconds + "s";
         }
         if (minutes != 0L) {
-            return color + minutes + color + "m " + seconds + color + "s";
+            return color + minutes + "m " + seconds + "s";
         }
         if (seconds != 0L) {
-            return color + seconds + color + "s";
+            return color + seconds + "s";
         }
         return "§4§l" + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
     }
