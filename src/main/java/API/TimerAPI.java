@@ -79,20 +79,17 @@ public class TimerAPI {
 
     // Timer
     public void TimerRunnable() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (isRunning()) {
-                        setTime(getTime() + 1);
-                        SaveTime();
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getTimeFormat()));
-                    } else {
-                        Stopped();
-                    }
+        Bukkit.getScheduler().runTaskTimer(Main.getInstance(), () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (isRunning()) {
+                    setTime(getTime() + 1);
+                    SaveTime();
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getTimeFormat()));
+                } else {
+                    Stopped();
                 }
             }
-        }.runTaskTimer(Main.getInstance(), 20, 20);
+        }, 20, 20);
     }
 
     // time format
