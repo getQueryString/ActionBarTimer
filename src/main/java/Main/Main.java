@@ -43,9 +43,6 @@ public final class Main extends JavaPlugin implements CommandExecutor {
         pm.registerEvents(new onKick(), this);
 
         timerapi = new TimerAPI();
-        if (timerapi.isRunning()) {
-            timerapi.setRunning(false);
-        }
         timerapi.TimerRunnable();
 
         Bukkit.getConsoleSender().sendMessage("§5Plugin fertig geladen");
@@ -53,6 +50,10 @@ public final class Main extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onDisable() {
+        if (timerapi.isRunning()) {
+            timerapi.setRunning(false);
+            Bukkit.getConsoleSender().sendMessage("§4Timer wurde pausiert");
+        }
     }
 
     public TimerAPI getTimer() {

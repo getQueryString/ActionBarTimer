@@ -23,6 +23,9 @@ public class TimerAPI {
     private boolean running = false;
     private int time = getConfig().getInt("Time");
 
+    public static String usage = "Verwendung: /timer <resume, pause, reset>, set <Zeit>";
+    private String color = null;
+
     // Main
     public TimerAPI() {
         instance = this;
@@ -65,6 +68,15 @@ public class TimerAPI {
         }
     }
 
+    public void SaveTime() {
+        try {
+            getConfig().set("Time", getTime());
+            getConfig().save(getFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Timer
     public void TimerRunnable() {
         new BukkitRunnable() {
@@ -73,12 +85,7 @@ public class TimerAPI {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (isRunning()) {
                         setTime(getTime() + 1);
-                        try {
-                            getConfig().set("Time", getTime());
-                            getConfig().save(getFile());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        SaveTime();
                         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getTimeFormat()));
                     } else {
                         Stopped();
@@ -96,6 +103,9 @@ public class TimerAPI {
         long days = 0L;
         long weeks = 0L;
 
+        if (isRunning()) color = "§c";
+        else color = "§4§l";
+
         while (seconds > 60L) {
             seconds -= 60L;
             minutes++;
@@ -112,42 +122,20 @@ public class TimerAPI {
             days -= 7L;
             weeks++;
         }
-        while (weeks > 7L) {
-            days -= 7L;
+        if (weeks != 0L) {
+            return color + weeks + color + "w " + days + color + "d " + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
         }
-        if (isRunning()) {
-            if (weeks != 0L) {
-                return "§c" + weeks + "§cw " + days + "§cd " + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
-            }
-            if (days != 0L) {
-                return "§c" + days + "§cd " + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
-            }
-            if (hours != 0L) {
-                return "§c" + hours + "§ch " + minutes + "§cm " + seconds + "§cs";
-            }
-            if (minutes != 0L) {
-                return "§c" + minutes + "§cm " + seconds + "§cs";
-            }
-            if (seconds != 0L) {
-                return "§c" + seconds + "§cs";
-            }
-
-        } else {
-            if (weeks != 0L) {
-                return "§4§l" + weeks + "§4§lw " + days + "§4§ld " + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
-            }
-            if (days != 0L) {
-                return "§4§l" + days + "§4§ld " + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
-            }
-            if (hours != 0L) {
-                return "§4§l" + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
-            }
-            if (minutes != 0L) {
-                return "§4§l" + minutes + "§4§lm " + seconds + "§4§ls";
-            }
-            if (seconds != 0L) {
-                return "§4§l" + seconds + "§4§ls";
-            }
+        if (days != 0L) {
+            return color + days + color + "d " + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
+        }
+        if (hours != 0L) {
+            return color + hours + color + "h " + minutes + color + "m " + seconds + color + "s";
+        }
+        if (minutes != 0L) {
+            return color + minutes + color + "m " + seconds + color + "s";
+        }
+        if (seconds != 0L) {
+            return color + seconds + color + "s";
         }
         return "§4§l" + hours + "§4§lh " + minutes + "§4§lm " + seconds + "§4§ls";
     }
