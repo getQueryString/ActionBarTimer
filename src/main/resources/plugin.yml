@@ -3,7 +3,8 @@ version: 1.0
 main: Main.Main
 api-version: 1.17
 authors: [ getQueryString, Jovaniwu ]
-description: Timer Plugin
+description: Timer plugin by getQueryString for Jovaniwu
+website: https://www.youtube.com/c/mrdudecrafthd
 
 commands:
   timer:
